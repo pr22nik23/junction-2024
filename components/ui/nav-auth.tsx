@@ -39,7 +39,7 @@ export const NavAuth: React.FC<NavAuthProps> = ({ user }) => {
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Profile</DropdownMenuItem>
+                            {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
                             <Link href={"/my-votes"}>
                                 <DropdownMenuItem>My votes</DropdownMenuItem>
                             </Link>
@@ -61,7 +61,7 @@ export const NavAuth: React.FC<NavAuthProps> = ({ user }) => {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
+                        {/* <DropdownMenuItem asChild>
                             <Link href="/">Home</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
@@ -69,12 +69,12 @@ export const NavAuth: React.FC<NavAuthProps> = ({ user }) => {
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                             <Link href="/contact">Contact</Link>
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
                         <DropdownMenuSeparator />
                         {user ? (
                             <>
-                                <DropdownMenuLabel>Profile</DropdownMenuLabel>
-                                <DropdownMenuItem>Profile</DropdownMenuItem>
+
+                                <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                 <Link href={"/my-votes"}>
                                     <DropdownMenuItem>My votes</DropdownMenuItem>
                                 </Link>

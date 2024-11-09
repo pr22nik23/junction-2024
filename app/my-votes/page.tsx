@@ -16,7 +16,7 @@ const MyVotes = async () => {
     console.log("VOTESSS", votes)
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 pt-20">
             <h1 className="text-2xl font-bold mb-4 mx-auto text-center">Your Past Votes</h1>
             <ScrollArea className="h-full w-full rounded-md border p-4 max-w-[1000px] mx-auto">
                 {votes && votes.map((vote) => (
