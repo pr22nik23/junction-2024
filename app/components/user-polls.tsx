@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress"
 import { Poll } from '@/utils/supabase.types'
 import { Answer } from '@/utils/supabase.types'
 
-import { Loader2 } from 'lucide-react'
+import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 import {
     CircleDollarSign,
     Ban,
@@ -25,6 +25,7 @@ import {
     Meh,
 } from "lucide-react";
 import { addAnswer } from '../actions'
+import { useRouter } from 'next/navigation'
 
 interface SequentialPollProps {
     polls: Poll[];
@@ -32,22 +33,44 @@ interface SequentialPollProps {
 }
 
 export default function UserPolls({ polls, user_id }: SequentialPollProps) {
-    //some comment:
     const [currentPollIndex, setCurrentPollIndex] = useState(0)
     const [isCompleted, setIsCompleted] = useState(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const router = useRouter()
     if (!polls) {
         return (
-            <div>
-                Errpr
-            </div>
+            <Card className="w-full max-w-md mx-auto border-red-200">
+                <CardHeader className="flex flex-col items-center space-y-2">
+                    <AlertCircle className="w-16 h-16 text-red-500" />
+                    <CardTitle className="text-2xl font-bold text-center text-red-700">Oops! An Error Occurred</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                    <p className="text-lg mb-4 text-gray-700">
+                        {"We couldn't load the polls at this time."}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                        Please try again later or contact support if the problem persists.
+                    </p>
+                </CardContent>
+            </Card>
         )
     }
     if (polls.length <= 0) {
         return (
-            <div>
-                Teine error
-            </div>
+            <Card className="w-full max-w-md mx-auto">
+                <CardHeader className="flex flex-col items-center space-y-2">
+                    <CheckCircle className="w-16 h-16 text-green-500" />
+                    <CardTitle className="text-2xl font-bold text-center">All Votes Cast!</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                    <p className="text-lg mb-4">
+                        {"You've voted on all available polls. Great job participating!"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                        Your voice matters. Check back later for new polls and keep making a difference!
+                    </p>
+                </CardContent>
+            </Card>
         )
     }
     const currentPoll = polls[currentPollIndex]
@@ -109,17 +132,20 @@ export default function UserPolls({ polls, user_id }: SequentialPollProps) {
         return (
             <Card className="w-full max-w-2xl mx-auto">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold text-center text-gray-800">Thank You!</CardTitle>
+                    <div className="flex justify-center">
+                        <CheckCircle className="w-12 h-12 text-green-600" />
+                    </div>
+                    <CardTitle className="text-2xl font-semibold text-center text-gray-800">All Polls Completed</CardTitle>
                     <CardDescription className="text-center text-gray-600">
                         Wait until some more polls are added
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="text-center">
-                        <p className="mb-4">You have completed all the questions</p>
                         <Button onClick={() => {
-                            setCurrentPollIndex(0)
+                            // setCurrentPollIndex(0)
                             setIsCompleted(false)
+                            router.refresh()
                         }}>
                             Update
                         </Button>
@@ -165,9 +191,6 @@ export default function UserPolls({ polls, user_id }: SequentialPollProps) {
                     </div>
                 )
                 }
-                {/* <p className="text-sm text-gray-500">
-                    Question {currentPollIndex + 1} of {polls.length}
-                </p> */}
             </CardFooter>
         </Card>
     )

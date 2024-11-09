@@ -61,15 +61,6 @@ export const NavAuth: React.FC<NavAuthProps> = ({ user }) => {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        {/* <DropdownMenuItem asChild>
-                            <Link href="/">Home</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                            <Link href="/about">About</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                            <Link href="/contact">Contact</Link>
-                        </DropdownMenuItem> */}
                         <DropdownMenuSeparator />
                         {user ? (
                             <>

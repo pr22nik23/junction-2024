@@ -1,8 +1,8 @@
 'use client'
 
-import { useState} from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react'
@@ -62,14 +62,13 @@ export default function GovernmentLogin() {
             <Card className="w-full max-w-md flex flex-col items-center">
                 <Image src="/swiftvote1.png" width={140} height={0} alt="logo" className='mt-6' />
                 <CardHeader className="space-y-1">
-                    {/* <CardTitle className="text-2xl font-bold text-center">Swiftvote login</CardTitle> */}
                     <CardDescription className="text-center">
                         Enter your Personal Identification Number (PIN)
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="w-full">
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-2">
+                        <div className="space-y-2 bg-white">
                             <Input
                                 id="personalCode"
                                 placeholder="Enter your PIN"
@@ -78,6 +77,7 @@ export default function GovernmentLogin() {
                                 required
                                 className="w-full"
                                 maxLength={20}
+
                             />
                         </div>
                         <Button type="submit" className="w-full hover:bg-cyan-700" disabled={isLoading}>
