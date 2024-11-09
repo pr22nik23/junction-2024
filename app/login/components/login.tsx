@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -8,59 +8,81 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Loader2 } from 'lucide-react'
 
-export default function Login() {
+const steps = [
+    { message: "Getting user from database...", duration: 1000 },
+    { message: "Validating user...", duration: 2000 },
+    { message: "User authenticated", duration: 1000 },
+    { message: "Redirecting...", duration: 1000 }
+]
+
+export default function GovernmentLogin() {
     const [personalCode, setPersonalCode] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState('')
+    const [loadingMessage, setLoadingMessage] = useState('')
+    const [currentStep, setCurrentStep] = useState(0)
     const router = useRouter()
+
+    const simulateWorkflow = async () => {
+        for (let i = 0; i < steps.length; i++) {
+            const step = steps[i]
+            setLoadingMessage(step.message)
+            await new Promise(resolve => setTimeout(resolve, step.duration))
+            if (step.duration == 2000) {
+                setCurrentStep(i + 2)
+            } else {
+                setCurrentStep(i + 1)
+            }
+        }
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setIsLoading(true)
         setError('')
+        if (personalCode !== "admin" && personalCode.length < 8) {
+            setError("Invalid Personal ID. Please enter a valid ID.")
+            return
+        }
 
+        setIsLoading(true)
+        setCurrentStep(0)
         try {
-            await new Promise(resolve => setTimeout(resolve, 2000))
-
             document.cookie = `user=${personalCode}; path=/; max-age=3600; SameSite=Strict`
-
-            await new Promise(resolve => setTimeout(resolve, 1000))
-
+            router.prefetch("/")
+            await simulateWorkflow()
             router.push('/')
         } catch (err) {
             setError('An error occurred. Please try again.')
-        } finally {
-            setIsLoading(false)
         }
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200 p-4">
             <Card className="w-full max-w-md">
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-center">Smart-ID Login</CardTitle>
                     <CardDescription className="text-center">
-                        Enter your personal code
+                        Enter your Personal Identification Number (PIN)
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="personalCode">Personal Code</Label>
                             <Input
                                 id="personalCode"
-                                placeholder="Enter your personal code"
+                                placeholder="Enter your PIN"
                                 value={personalCode}
                                 onChange={(e) => setPersonalCode(e.target.value)}
                                 required
                                 className="w-full"
+                                maxLength={20}
                             />
                         </div>
-                        <Button type="submit" className="w-full" disabled={isLoading}>
+                        <Button type="submit" className="w-full hover:bg-slate-700" disabled={isLoading}>
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Verifying...
+                                    Processing...
                                 </>
                             ) : (
                                 'Login'
@@ -69,8 +91,14 @@ export default function Login() {
                     </form>
                     {error && <p className="mt-4 text-sm text-red-600 text-center">{error}</p>}
                     {isLoading && (
-                        <div className="mt-4 text-center">
-                            <p className="text-sm text-gray-600">Retrieving user information...</p>
+                        <div className="mt-4 space-y-2">
+                            <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                                <div
+                                    className="h-full bg-blue-600 transition-all duration-500 ease-out"
+                                    style={{ width: `${(currentStep / steps.length) * 100}%` }}
+                                ></div>
+                            </div>
+                            <p className="text-sm text-gray-600 text-center">{loadingMessage}</p>
                         </div>
                     )}
                 </CardContent>

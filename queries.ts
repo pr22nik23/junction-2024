@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, and, isNull } from "drizzle-orm";
 import db from "./utils/db";
 import { AnswerTS, Poll } from "./utils/supabase.types";
 import { answers, poll, poll_answer } from "./utils/supabase/schema";
@@ -43,17 +43,18 @@ export async function pollAnswer(answer: string, userID: string, poll_id: number
 
 export async function getPollUrls(user_id: string): Promise<Poll[]> {
     try {
-        const data = await db
-            .select({
-                poll: poll,
-                answer: answers,
-            })
-            .from(poll)
-            .leftJoin(answers, eq(answers.poll_id, poll.id)) // Left join with `answers`
-            .leftJoin(poll_answer, eq(poll_answer.poll_id, poll.id)) // Left join with `poll_answer`
-            .where(
-                sql`${poll_answer.user_id} IS NULL OR ${poll_answer.user_id} != ${user_id}`
-            );
+const data = await db
+    .select({
+        poll: poll,
+        answer: answers,
+    })
+    .from(poll)
+    .leftJoin(answers, eq(answers.poll_id, poll.id))
+    .leftJoin(
+        poll_answer,
+        and(eq(poll_answer.poll_id, poll.id), eq(poll_answer.user_id, user_id))
+    )
+    .where(isNull(poll_answer.user_id));
         const pollMap: Record<number, Poll> = {};
 
         data.forEach((row) => {

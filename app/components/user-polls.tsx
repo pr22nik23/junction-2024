@@ -6,7 +6,21 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Poll } from '@/utils/supabase.types'
 import { Answer } from '@/utils/supabase.types'
-import { CircleDollarSign, Ban } from 'lucide-react'
+import {
+    CircleDollarSign,
+    Ban,
+    Globe,
+    Users,
+    Briefcase,
+    Gavel,
+    Award,
+    Flag,
+    Shield,
+    Vote,
+    Handshake,
+    Scale,
+    Newspaper,
+} from "lucide-react";
 import { addAnswer } from '../actions'
 
 interface SequentialPollProps {
@@ -49,14 +63,39 @@ export default function UserPolls({ polls, user_id }: SequentialPollProps) {
         }
     }
 
-    const getIconComponent = (image: string) => {
-        switch (image) {
-            case "money":
-                return <><CircleDollarSign /></>
-            default:
-                return <><Ban /></>
-        }
+   
+const getIconComponent = (image: string) => {
+    switch (image) {
+        case "money":
+            return <><CircleDollarSign /></>
+        case "ban":
+            return <><Ban /></>
+        case "globe":
+            return <><Globe /></>                
+        case "group":
+            return <><Users /></>                
+        case "briefcase":
+            return <><Briefcase /></>            
+        case "gavel":
+            return <><Gavel /></>                
+        case "award":
+            return <><Award /></>                
+        case "flag":
+            return <><Flag /></>                 
+        case "shield":
+            return <><Shield /></>               
+        case "vote":
+            return <><Vote /></>                 
+        case "handshake":
+            return <><Handshake /></>            
+        case "scale":
+            return <><Scale /></>                
+        case "newspaper":
+            return <><Newspaper /></>            
+        default:
+            return <><Ban /></>
     }
+}; 
 
     if (isCompleted) {
         return (

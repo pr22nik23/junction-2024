@@ -5,6 +5,7 @@ import { getPollUrls } from "@/queries"
 import { AnswerTS } from "@/utils/supabase.types"
 import { Poll } from "@/utils/supabase.types"
 import { pollAnswer } from "@/queries"
+import { cookies } from "next/headers"
 
 export const createPollAction = async (question: string, description: string, answers: AnswerTS[]) => {
   await createPoll(question, description, answers)
@@ -17,3 +18,8 @@ export const getPolls = async (userID: string): Promise<Poll[]> => {
 export const addAnswer = async (answer: string, user_id: string, poll_id: number) => {
   await pollAnswer(answer, user_id, poll_id)
 }
+
+export const deleteCookie = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete('user');
+};
