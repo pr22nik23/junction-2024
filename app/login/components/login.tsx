@@ -80,7 +80,7 @@ export default function GovernmentLogin() {
                                 maxLength={20}
                             />
                         </div>
-                        <Button type="submit" className="w-full hover:bg-slate-700" disabled={isLoading}>
+                        <Button type="submit" className="w-full hover:bg-cyan-700" disabled={isLoading}>
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -96,7 +96,7 @@ export default function GovernmentLogin() {
                         <div className="mt-4 space-y-2">
                             <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
                                 <div
-                                    className="h-full bg-black transition-all duration-500 ease-out"
+                                    className="h-full bg-cyan-800 transition-all duration-500 ease-out"
                                     style={{ width: `${(currentStep / steps.length) * 100}%` }}
                                 ></div>
                             </div>
