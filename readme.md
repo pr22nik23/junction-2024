@@ -18,7 +18,9 @@ SwiftVote provides government bodies with a simple way to gather and assess publ
 
 ### Deployment
 
-SwiftVote is hosted on **Vercel** for fast, reliable, and globally accessible deployment.
+SwiftVote is hosted on **Vercel** for fast, reliable, and globally accessible deployment.  
+[https://junction-2024.vercel.app/login](https://junction-2024.vercel.app/login)
+
 
 ## Getting Started
 
