@@ -32,6 +32,7 @@ interface SequentialPollProps {
 }
 
 export default function UserPolls({ polls, user_id }: SequentialPollProps) {
+    //some comment:
     const [currentPollIndex, setCurrentPollIndex] = useState(0)
     const [isCompleted, setIsCompleted] = useState(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
