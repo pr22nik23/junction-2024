@@ -14,7 +14,7 @@ export default async function Home() {
 
   if (user == "admin") {
     return (
-      <div className="mt-40">
+      <div className="pt-40">
         <PollForm />
       </div>
     )
@@ -22,8 +22,9 @@ export default async function Home() {
 
   const data = await getPolls(user)
   return (
-    <div className="mt-40">
+    <div className="pt-40">
       <UserPolls polls={data} user_id={user} />
+      {/* <Statistics /> */}
     </div>
   );
 }

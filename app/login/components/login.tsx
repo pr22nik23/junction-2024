@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState} from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
 import { Loader2 } from 'lucide-react'
+import Image from 'next/image'
 
 const steps = [
     { message: "Getting user from database...", duration: 1000 },
@@ -48,24 +48,26 @@ export default function GovernmentLogin() {
         setCurrentStep(0)
         try {
             document.cookie = `user=${personalCode}; path=/; max-age=3600; SameSite=Strict`
-            router.prefetch("/")
             await simulateWorkflow()
             router.push('/')
+            router.refresh()
         } catch (err) {
+            console.log(err)
             setError('An error occurred. Please try again.')
         }
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200 p-4">
-            <Card className="w-full max-w-md">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200 p-4 max-h-screen">
+            <Card className="w-full max-w-md flex flex-col items-center">
+                <Image src="/swiftvote1.png" width={140} height={0} alt="logo" className='mt-6' />
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">Smart-ID Login</CardTitle>
+                    {/* <CardTitle className="text-2xl font-bold text-center">Swiftvote login</CardTitle> */}
                     <CardDescription className="text-center">
                         Enter your Personal Identification Number (PIN)
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="w-full">
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Input
@@ -94,7 +96,7 @@ export default function GovernmentLogin() {
                         <div className="mt-4 space-y-2">
                             <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
                                 <div
-                                    className="h-full bg-blue-600 transition-all duration-500 ease-out"
+                                    className="h-full bg-black transition-all duration-500 ease-out"
                                     style={{ width: `${(currentStep / steps.length) * 100}%` }}
                                 ></div>
                             </div>

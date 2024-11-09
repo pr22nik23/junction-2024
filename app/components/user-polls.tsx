@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Poll } from '@/utils/supabase.types'
 import { Answer } from '@/utils/supabase.types'
+
+import { Loader2 } from 'lucide-react'
 import {
     CircleDollarSign,
     Ban,
@@ -20,6 +22,7 @@ import {
     Handshake,
     Scale,
     Newspaper,
+    Meh,
 } from "lucide-react";
 import { addAnswer } from '../actions'
 
@@ -31,6 +34,7 @@ interface SequentialPollProps {
 export default function UserPolls({ polls, user_id }: SequentialPollProps) {
     const [currentPollIndex, setCurrentPollIndex] = useState(0)
     const [isCompleted, setIsCompleted] = useState(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     if (!polls) {
         return (
             <div>
@@ -49,10 +53,10 @@ export default function UserPolls({ polls, user_id }: SequentialPollProps) {
     const progress = ((currentPollIndex + 1) / polls.length) * 100
 
     const handleAnswer = async (answer: Answer) => {
-        console.log("answer", answer)
+        setIsLoading(true)
         try {
             await addAnswer(answer.answer, user_id, answer.poll_id)
-        } catch (error: any) {
+        } catch (error) {
             console.log("error", error)
 
         }
@@ -61,41 +65,44 @@ export default function UserPolls({ polls, user_id }: SequentialPollProps) {
         } else {
             setIsCompleted(true)
         }
+        setIsLoading(false)
     }
 
-   
-const getIconComponent = (image: string) => {
-    switch (image) {
-        case "money":
-            return <><CircleDollarSign /></>
-        case "ban":
-            return <><Ban /></>
-        case "globe":
-            return <><Globe /></>                
-        case "group":
-            return <><Users /></>                
-        case "briefcase":
-            return <><Briefcase /></>            
-        case "gavel":
-            return <><Gavel /></>                
-        case "award":
-            return <><Award /></>                
-        case "flag":
-            return <><Flag /></>                 
-        case "shield":
-            return <><Shield /></>               
-        case "vote":
-            return <><Vote /></>                 
-        case "handshake":
-            return <><Handshake /></>            
-        case "scale":
-            return <><Scale /></>                
-        case "newspaper":
-            return <><Newspaper /></>            
-        default:
-            return <><Ban /></>
-    }
-}; 
+
+    const getIconComponent = (image: string) => {
+        switch (image) {
+            case "money":
+                return <><CircleDollarSign /></>
+            case "ban":
+                return <><Ban /></>
+            case "globe":
+                return <><Globe /></>
+            case "group":
+                return <><Users /></>
+            case "briefcase":
+                return <><Briefcase /></>
+            case "gavel":
+                return <><Gavel /></>
+            case "award":
+                return <><Award /></>
+            case "flag":
+                return <><Flag /></>
+            case "shield":
+                return <><Shield /></>
+            case "vote":
+                return <><Vote /></>
+            case "handshake":
+                return <><Handshake /></>
+            case "scale":
+                return <><Scale /></>
+            case "newspaper":
+                return <><Newspaper /></>
+            case "balance":
+                return <><Meh /></>
+            default:
+                return <><Ban /></>
+        }
+    };
 
     if (isCompleted) {
         return (
@@ -140,18 +147,26 @@ const getIconComponent = (image: string) => {
                             onClick={() => handleAnswer(answer)}
                             className="w-full justify-start text-left h-auto py-4 px-6"
                             variant="outline"
+                            disabled={isLoading}
                         >
                             {getIconComponent(answer.image)}
                             {answer.answer}
                         </Button>
                     ))}
                 </div>
+
             </CardContent>
             <CardFooter className="flex flex-col items-center">
                 <Progress value={progress} className="w-full mb-2" />
-                <p className="text-sm text-gray-500">
+                {isLoading && (
+                    <div className="flex items-center pt-2 justify-center flex-col">
+                        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                    </div>
+                )
+                }
+                {/* <p className="text-sm text-gray-500">
                     Question {currentPollIndex + 1} of {polls.length}
-                </p>
+                </p> */}
             </CardFooter>
         </Card>
     )

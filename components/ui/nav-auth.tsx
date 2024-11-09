@@ -7,20 +7,24 @@ import Link from 'next/link'
 import { Menu, User } from 'lucide-react'
 import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 import { deleteCookie } from '@/app/actions'
+import { useRouter } from 'next/navigation'
+
 
 interface NavAuthProps {
     user: RequestCookie | undefined
 }
 
-const handleLogout = async () => {
-    try {
-        await deleteCookie()
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 export const NavAuth: React.FC<NavAuthProps> = ({ user }) => {
+    const router = useRouter()
+    const handleLogout = async () => {
+        try {
+            await deleteCookie()
+            router.refresh()
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div className='flex items-center'>
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -29,15 +33,17 @@ export const NavAuth: React.FC<NavAuthProps> = ({ user }) => {
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="flex items-center">
                                 <User className="mr-2 h-4 w-4" />
-                                {user.name}
+                                Profile
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Profile</DropdownMenuItem>
-                            <DropdownMenuItem>Settings</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => { }}>Logout</DropdownMenuItem>
+                            <Link href={"/my-votes"}>
+                                <DropdownMenuItem>My votes</DropdownMenuItem>
+                            </Link>
+                            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 ) : (
@@ -67,10 +73,12 @@ export const NavAuth: React.FC<NavAuthProps> = ({ user }) => {
                         <DropdownMenuSeparator />
                         {user ? (
                             <>
-                                <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+                                <DropdownMenuLabel>Profile</DropdownMenuLabel>
                                 <DropdownMenuItem>Profile</DropdownMenuItem>
-                                <DropdownMenuItem>Settings</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => { }}>Logout</DropdownMenuItem>
+                                <Link href={"/my-votes"}>
+                                    <DropdownMenuItem>My votes</DropdownMenuItem>
+                                </Link>
+                                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                             </>
                         ) : (
                             <DropdownMenuItem onClick={handleLogout}>Login</DropdownMenuItem>

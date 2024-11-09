@@ -43,18 +43,18 @@ export async function pollAnswer(answer: string, userID: string, poll_id: number
 
 export async function getPollUrls(user_id: string): Promise<Poll[]> {
     try {
-const data = await db
-    .select({
-        poll: poll,
-        answer: answers,
-    })
-    .from(poll)
-    .leftJoin(answers, eq(answers.poll_id, poll.id))
-    .leftJoin(
-        poll_answer,
-        and(eq(poll_answer.poll_id, poll.id), eq(poll_answer.user_id, user_id))
-    )
-    .where(isNull(poll_answer.user_id));
+        const data = await db
+            .select({
+                poll: poll,
+                answer: answers,
+            })
+            .from(poll)
+            .leftJoin(answers, eq(answers.poll_id, poll.id))
+            .leftJoin(
+                poll_answer,
+                and(eq(poll_answer.poll_id, poll.id), eq(poll_answer.user_id, user_id))
+            )
+            .where(isNull(poll_answer.user_id));
         const pollMap: Record<number, Poll> = {};
 
         data.forEach((row) => {
@@ -76,5 +76,22 @@ const data = await db
     } catch (error) {
         console.error('Error retrieving poll URLs:', error);
         return [];
+    }
+}
+
+export const getUserVotes = async (user_id: string) => {
+    console.log("USERRR",user_id)
+    try {
+        const data = await db.select({
+            poll: poll,
+            pollanswer: poll_answer
+        })
+        .from(poll)
+        .leftJoin(poll_answer, eq(poll.id, poll_answer.poll_id))
+        .where(eq(poll_answer.user_id, user_id))
+
+        return data
+    } catch(error) {
+        console.log(error)
     }
 }
